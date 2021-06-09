@@ -29,6 +29,9 @@ private:
 	cocos2d::ui::TextBMFont* _GreenBMValue;
 	cocos2d::ui::TextBMFont* _BlueBMValue;
 
+	cocos2d::ui::TextBMFont* _WindDirBMValue;
+	cocos2d::ui::TextBMFont* _WindForceBMValue;
+
 	// 選擇不同的分子型態，用在 Emitter 沒有開啟的狀態
 	cocos2d::ui::TextBMFont* _TypeBMValue;
 
@@ -59,6 +62,8 @@ public:
 	void GreenEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
 	void BlueEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
 	
+	void WindDirEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
+	void WindForceEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
 
 	// touch 事件
 	void onTouchBegan(const cocos2d::Point& touchLoc);

@@ -100,6 +100,7 @@ bool CButton::onTouchBegan(const cocos2d::Point& touchLoc) {
 	}
 	return false;
 }
+
 bool CButton::onTouchMoved(const cocos2d::Point& touchLoc) {
 	if (_isTouch) {
 		if (!_rect.containsPoint(touchLoc)) {

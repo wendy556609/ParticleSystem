@@ -5,8 +5,6 @@
 #include "CParticle.h"
 #include <list>
 
-using namespace std;
-
 class CParticleSystem
 {
 private:
@@ -17,6 +15,7 @@ private:
 	int _iInUsed;
 	int _iFree;
 	
+	//Particle Value
 	float _Gravity;
 	float _Spread;
 	float _Direction;
@@ -29,17 +28,32 @@ private:
 	float _Green;
 	float _Blue;
 
+	float _WindForce;
+	cocos2d::Point _WindDir;
+	cocos2d::Point _Dir;
+	float _DirAngle;
+
 	cocos2d::Color3B _color;
 	std::string _SpriteName;
 
 	int _iType;
+	int _iMode;
 
 	cocos2d::Point _emitterPos;
 	bool _bEmitterOn;
+
+	//Mode
+	bool _bfireworkTail;
+	bool _bfireworkPop;
+
+	cocos2d::Point _MoveLoc;
+	float _fModeSpeed;
 public:
+	float _fModeTime;
 	float _fTime;
 	int _iTotEmitterNum;
 	int _iCurEmitterNum;
+	bool _bModeEnd;
 
 	CParticleSystem();
 	~CParticleSystem();
@@ -48,6 +62,7 @@ public:
 	void update(float dt);
 
 	void setType(int type);
+	void setMode(int Mode);
 	void setGravity(float Gravity);
 	void setSpread(float Spread);
 	void setDirection(float Direction);
@@ -59,6 +74,8 @@ public:
 	void setRed(float Red);
 	void setGreen(float Green);
 	void setBlue(float Blue);
+	void setWindDir(float WindDir);
+	void setWindForce(float WindForce);
 	void setEmitterPos(cocos2d::Point pos);
 
 	void setSprite(std::string &spriteName);

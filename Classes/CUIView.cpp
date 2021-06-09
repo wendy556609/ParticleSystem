@@ -14,6 +14,8 @@ CUIView::CUIView() {
 	_SpeedBMValue = nullptr;
 	_TypeBMValue = nullptr;
 	_OpacityBMValue = nullptr;
+	_WindDirBMValue = nullptr;
+	_WindForceBMValue = nullptr;
 	
 	_BtnGroup = nullptr;
 	_Emitter = nullptr;
@@ -93,6 +95,16 @@ void CUIView::init(cocos2d::Scene& stage) {
 	BlueSlider->setMaxPercent(100);
 	_BlueBMValue = dynamic_cast<cocos2d::ui::TextBMFont*>(_uiRoot->getChildByName("BlueBMFont"));
 
+	auto* WindDirSlider = dynamic_cast<cocos2d::ui::Slider*>(_uiRoot->getChildByName("Slider_WindDirection"));
+	WindDirSlider->addEventListener(CC_CALLBACK_2(CUIView::WindDirEvent, this));
+	WindDirSlider->setMaxPercent(100);
+	_WindDirBMValue = dynamic_cast<cocos2d::ui::TextBMFont*>(_uiRoot->getChildByName("WindDirectionBMFont"));
+
+	auto* WindForceSlider = dynamic_cast<cocos2d::ui::Slider*>(_uiRoot->getChildByName("Slider_WindForce"));
+	WindForceSlider->addEventListener(CC_CALLBACK_2(CUIView::WindForceEvent, this));
+	WindForceSlider->setMaxPercent(100);
+	_WindForceBMValue = dynamic_cast<cocos2d::ui::TextBMFont*>(_uiRoot->getChildByName("WindForceBMFont"));
+
 	auto* TypeSlider = dynamic_cast<cocos2d::ui::Slider*>(_uiRoot->getChildByName("Slider_Type"));
 	TypeSlider->addEventListener(CC_CALLBACK_2(CUIView::TypeEvent, this));
 	TypeSlider->setMaxPercent(100);
@@ -111,6 +123,8 @@ void CUIView::setTarget(CParticleSystem& ParticleSystem) {
 	_ParticleSystem->setRed(255);
 	_ParticleSystem->setGreen(255);
 	_ParticleSystem->setBlue(255);
+	_ParticleSystem->setWindDir(0);
+	_ParticleSystem->setWindForce(0);
 	_ParticleSystem->setSprite(_BtnGroup->getBtnSprite());
 	
 	_ParticleSystem->_fTime = 0;
@@ -119,6 +133,8 @@ void CUIView::setTarget(CParticleSystem& ParticleSystem) {
 }
 
 void CUIView::update(float dt) {
+	if (_ParticleSystem->_bModeEnd)
+		_ParticleSystem->setMode(_BtnGroup->getBtnMode());
 	_ParticleSystem->update(dt);
 }
 
@@ -147,9 +163,14 @@ void CUIView::onTouchEnded(const cocos2d::Point& touchLoc) {
 	_bEmitterOn = _BtnGroup->getBtnState(EMITTERBTN);
 	_Emitter->setEnable(_bEmitterOn);
 	_ParticleSystem->onEmitter(_bEmitterOn);
-	if (_bEmitterOn)
-		_ParticleSystem->setEmitterPos(_Emitter->getPosition());
 
+	
+	if (_bEmitterOn) {
+		_BtnGroup->getBtnState(MODEBTN);
+		_ParticleSystem->setEmitterPos(_Emitter->getPosition());
+		//_ParticleSystem->setMode(_BtnGroup->getBtnMode());
+	}
+		
 	if (_Emitter->onTouchEnded(touchLoc))
 		_ParticleSystem->setEmitterPos(_Emitter->getPosition());
 }
@@ -271,5 +292,25 @@ void CUIView::BlueEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType typ
 		float fBlue = persent * 2.55f;
 		_BlueBMValue->setString(StringUtils::format("%2.0f", fBlue));
 		_ParticleSystem->setBlue(fBlue);
+	}
+}
+
+void CUIView::WindDirEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type) {
+	if (type == Slider::EventType::ON_PERCENTAGE_CHANGED) {
+		const Slider* slider = dynamic_cast<cocos2d::ui::Slider*>(sender);
+		int persent = slider->getPercent();
+		float fWindDir = persent * 3.6f;
+		_WindDirBMValue->setString(StringUtils::format("%2.0f", fWindDir));
+		_ParticleSystem->setWindDir(fWindDir);
+	}
+}
+
+void CUIView::WindForceEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type) {
+	if (type == Slider::EventType::ON_PERCENTAGE_CHANGED) {
+		const Slider* slider = dynamic_cast<cocos2d::ui::Slider*>(sender);
+		int persent = slider->getPercent();
+		float fWindForce = persent / 10.0f;
+		_WindForceBMValue->setString(StringUtils::format("%2.0f", fWindForce));
+		_ParticleSystem->setWindForce(fWindForce);
 	}
 }

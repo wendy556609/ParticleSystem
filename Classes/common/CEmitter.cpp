@@ -2,6 +2,10 @@
 
 USING_NS_CC;
 
+#define FALLING_TIME 2.5f
+#define MAX_HEIGHT 720.0f
+#define PIXEL_PERM (2.0f*MAX_HEIGHT/(9.8f*FALLING_TIME*FALLING_TIME))
+
 CEmitter::CEmitter()
 {
 	_Emitter = nullptr;
@@ -62,8 +66,10 @@ void CEmitter::setPosition(cocos2d::Point pos) {
 void CEmitter::setEnable(bool enable) {
 	_bEnable = enable;
 	_Emitter->setVisible(enable);
-	if(!enable)
-		setPosition(_initPos);
+}
+
+void CEmitter::setInit() {
+	setPosition(_initPos);
 }
 
 cocos2d::Point CEmitter::getPosition() {

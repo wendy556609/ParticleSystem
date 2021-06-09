@@ -53,9 +53,6 @@
     <ClInclude Include="..\Classes\MainScene.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\CUIView.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\CParticle.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -70,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\common\CButtonGroup.h">
       <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CUIView.h">
+      <Filter>win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
