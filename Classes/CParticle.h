@@ -23,7 +23,13 @@ using namespace std;
 #define FIREWORKPOP 7
 #define FIRE 8
 #define SMOKE 9
-#define Lucky 10
+#define LUCKY 10
+#define CLEAR 11
+#define RAIN 12
+#define WAVE 13
+#define SNOW 14
+#define SNOWDROP 15
+#define LOVE 16
 #define EMITTER 99
 
 class CParticle
@@ -56,10 +62,12 @@ private:
 	bool _bChange;
 
 	float _fModeTime;
-	//
 
 	int _iType;
 public:
+	cocos2d::Point _range;
+	cocos2d::Point _BornPos;
+
 	CParticle();
 
 	void setProperty(std::string pngname, cocos2d::Scene& stage);

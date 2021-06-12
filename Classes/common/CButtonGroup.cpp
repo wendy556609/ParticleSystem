@@ -110,6 +110,21 @@ void CButtonGroup::init(cocos2d::Node& root, cocos2d::Scene& stage) {
 	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("lucky_Btn"));
 	loc->setVisible(false);
 	_LuckyBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+
+	_RainBtn = new(nothrow)CButton();
+	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("rain_Btn"));
+	loc->setVisible(false);
+	_RainBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+
+	_SnowBtn = new(nothrow)CButton();
+	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("snow_Btn"));
+	loc->setVisible(false);
+	_SnowBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+
+	_LoveBtn = new(nothrow)CButton();
+	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("love_Btn"));
+	loc->setVisible(false);
+	_LoveBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
 }
 
 bool CButtonGroup::getBtnState(int type) {
@@ -147,20 +162,26 @@ bool CButtonGroup::getBtnState(int type) {
 	case MODEBTN:
 		if (_FireworkBtn->getBtnState()) {
 			_Mode = FIREWORKSTYLE;
-			return true;
 		}
 		else if (_FireBtn->getBtnState()) {
 			_Mode = FIRE;
-			return true;
 		}
 		else if (_LuckyBtn->getBtnState()) {
-			_Mode = Lucky;
-			return true;
+			_Mode = LUCKY;
+		}
+		else if (_RainBtn->getBtnState()) {
+			_Mode = RAIN;
+		}
+		else if (_SnowBtn->getBtnState()) {
+			_Mode = SNOW;
+		}
+		else if (_LoveBtn->getBtnState()) {
+			_Mode = LOVE;
 		}
 		else {
 			_Mode = EMITTER;
-			return false;
 		}
+		return true;
 		break;
 	default:
 		break;
@@ -235,6 +256,15 @@ bool CButtonGroup::onTouchBegan(const cocos2d::Point& touchLoc) {
 	else if (_LuckyBtn->onTouchBegan(touchLoc)) {
 		return true;
 	}
+	else if (_RainBtn->onTouchBegan(touchLoc)) {
+		return true;
+	}
+	else if (_SnowBtn->onTouchBegan(touchLoc)) {
+		return true;
+	}
+	else if (_LoveBtn->onTouchBegan(touchLoc)) {
+		return true;
+	}
 	return false;
 }
 
@@ -271,6 +301,15 @@ bool CButtonGroup::onTouchMoved(const cocos2d::Point& touchLoc) {
 		return true;
 	}
 	else if (_LuckyBtn->onTouchMoved(touchLoc)) {
+		return true;
+	}
+	else if (_RainBtn->onTouchMoved(touchLoc)) {
+		return true;
+	}
+	else if (_SnowBtn->onTouchMoved(touchLoc)) {
+		return true;
+	}
+	else if (_LoveBtn->onTouchMoved(touchLoc)) {
 		return true;
 	}
 	return false;
@@ -365,6 +404,48 @@ bool CButtonGroup::onTouchEnded(const cocos2d::Point& touchLoc) {
 			_curModeBtn = _LuckyBtn;
 		}
 		else if (_curModeBtn == _LuckyBtn) {
+			_curModeBtn = nullptr;
+		}
+		return true;
+	}
+	else if (_RainBtn->onTouchEnded(touchLoc)) {
+		if (_curModeBtn == nullptr) {
+			_curModeBtn = _RainBtn;
+		}
+		else if (_curModeBtn != _RainBtn && _curModeBtn != nullptr) {
+			_curModeBtn->switchBtn();
+			_curModeBtn->setEnable(true);
+			_curModeBtn = _RainBtn;
+		}
+		else if (_curModeBtn == _RainBtn) {
+			_curModeBtn = nullptr;
+		}
+		return true;
+	}
+	else if (_SnowBtn->onTouchEnded(touchLoc)) {
+		if (_curModeBtn == nullptr) {
+			_curModeBtn = _SnowBtn;
+		}
+		else if (_curModeBtn != _SnowBtn && _curModeBtn != nullptr) {
+			_curModeBtn->switchBtn();
+			_curModeBtn->setEnable(true);
+			_curModeBtn = _SnowBtn;
+		}
+		else if (_curModeBtn == _SnowBtn) {
+			_curModeBtn = nullptr;
+		}
+		return true;
+	}
+	else if (_LoveBtn->onTouchEnded(touchLoc)) {
+		if (_curModeBtn == nullptr) {
+			_curModeBtn = _LoveBtn;
+		}
+		else if (_curModeBtn != _LoveBtn && _curModeBtn != nullptr) {
+			_curModeBtn->switchBtn();
+			_curModeBtn->setEnable(true);
+			_curModeBtn = _LoveBtn;
+		}
+		else if (_curModeBtn == _LoveBtn) {
 			_curModeBtn = nullptr;
 		}
 		return true;

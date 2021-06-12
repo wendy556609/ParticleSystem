@@ -18,12 +18,10 @@ CUIView::CUIView() {
 	_WindForceBMValue = nullptr;
 	
 	_BtnGroup = nullptr;
-	_Emitter = nullptr;
 	_bEmitterOn = false;
 }
 
 CUIView::~CUIView() {
-	CC_SAFE_DELETE(_Emitter);
 }
 
 void CUIView::setProperty(std::string uicsbname, cocos2d::Size vsize, cocos2d::Scene& stage) {
@@ -37,7 +35,7 @@ void CUIView::init(cocos2d::Scene& stage) {
 	CButtonGroup::getInstance()->init(*_uiRoot, stage);
 	_BtnGroup = CButtonGroup::getInstance();
 
-	_Emitter = new(nothrow)CEmitter();
+	_Emitter = CEmitter::getInstance();
 	_Emitter->setSprite("emittericon.png", Point(_size.width / 2, _size.height / 2), stage);
 
 	auto* GravitySlider = dynamic_cast<cocos2d::ui::Slider*>(_uiRoot->getChildByName("Slider_Gravity"));
@@ -133,8 +131,10 @@ void CUIView::setTarget(CParticleSystem& ParticleSystem) {
 }
 
 void CUIView::update(float dt) {
-	if (_ParticleSystem->_bModeEnd)
+	if (_ParticleSystem->_bModeEnd) {
 		_ParticleSystem->setMode(_BtnGroup->getBtnMode());
+		_ParticleSystem->setEmitterPos(_Emitter->getPosition());
+	}
 	_ParticleSystem->update(dt);
 }
 
@@ -163,12 +163,11 @@ void CUIView::onTouchEnded(const cocos2d::Point& touchLoc) {
 	_bEmitterOn = _BtnGroup->getBtnState(EMITTERBTN);
 	_Emitter->setEnable(_bEmitterOn);
 	_ParticleSystem->onEmitter(_bEmitterOn);
-
 	
 	if (_bEmitterOn) {
-		_BtnGroup->getBtnState(MODEBTN);
+		if (_BtnGroup->getBtnState(MODEBTN))
+			_Emitter->setType(_BtnGroup->getBtnMode());
 		_ParticleSystem->setEmitterPos(_Emitter->getPosition());
-		//_ParticleSystem->setMode(_BtnGroup->getBtnMode());
 	}
 		
 	if (_Emitter->onTouchEnded(touchLoc))

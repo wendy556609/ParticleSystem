@@ -25,6 +25,7 @@
 #include "AppDelegate.h"
 #include "MainScene.h"
 #include "common/CButtonGroup.h"
+#include "common/CEmitter.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -56,6 +57,7 @@ AppDelegate::AppDelegate()
 AppDelegate::~AppDelegate() 
 {
     CButtonGroup::getInstance()->Destroy();
+    CEmitter::getInstance()->Destroy();
 #if USE_AUDIO_ENGINE
     AudioEngine::end();
 #elif USE_SIMPLE_AUDIO_ENGINE

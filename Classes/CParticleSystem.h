@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "cocostudio/CocoStudio.h"
 #include "CParticle.h"
+#include "common/CEmitter.h"
 #include <list>
 
 class CParticleSystem
@@ -11,6 +12,7 @@ private:
 	CParticle* _Particle;
 	list<CParticle*> _FreeList;
 	list<CParticle*> _InUsedList;
+	list<CParticle*> _InSnowList;
 
 	int _iInUsed;
 	int _iFree;
@@ -29,6 +31,7 @@ private:
 	float _Blue;
 
 	float _WindForce;
+	float _WindAngle;
 	cocos2d::Point _WindDir;
 	cocos2d::Point _Dir;
 	float _DirAngle;
@@ -45,12 +48,16 @@ private:
 	//Mode
 	bool _bfireworkTail;
 	bool _bfireworkPop;
+	bool _bluckyDraw;
+	bool _bluckyClear;
 
 	cocos2d::Point _MoveLoc;
 	float _fModeSpeed;
 public:
+	float _fTheta;
 	float _fModeTime;
 	float _fTime;
+	float _fBornTime;
 	int _iTotEmitterNum;
 	int _iCurEmitterNum;
 	bool _bModeEnd;

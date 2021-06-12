@@ -35,13 +35,15 @@ void CParticleSystem::init(cocos2d::Scene& stage) {
 void CParticleSystem::update(float dt) {
 	CParticle* get;
 	list <CParticle*>::iterator it;
-	
-		int n;
-		if (_bEmitterOn) {
-		switch (_iMode)
-		{
-		case EMITTER:
-			
+	int num;
+	string sprite;
+	std::ostringstream ostr;
+	int n;
+	if (_bEmitterOn) {
+			switch (_iMode)
+			{
+			case EMITTER:
+
 				_bModeEnd = false;
 				n = (int)(_fTime * _iTotEmitterNum);
 				if (n > _iCurEmitterNum) {
@@ -82,165 +84,283 @@ void CParticleSystem::update(float dt) {
 					if (_iCurEmitterNum >= _iTotEmitterNum)_iCurEmitterNum -= _iTotEmitterNum;
 					else _iCurEmitterNum = 0;
 				}
-			break;
-		case FIREWORKSTYLE:
-			if (_bfireworkTail) {
-				if (_fTime == 0) {
-					_bModeEnd = false;
-					_MoveLoc = _emitterPos;
+				break;
+			case FIREWORKSTYLE:
+				if (_bfireworkTail) {
+					if (_fTime == 0) {
+						_bModeEnd = false;
+						_MoveLoc = _emitterPos;
 
-					_Direction = 90;
+						_Direction = 90;
+						float t = rand() % 101 / 100.0f;
+						t = 45.0f - t * 45.0f * 2;
+						_DirAngle = (t + _Direction);
+						t = (t + _Direction) * M_PI / 180.0f;
+						_Dir = Vec2(cosf(t), sinf(t));
+
+						_fModeSpeed = rand() % 10 + 10.0f;
+					}
+					float sint = sinf(M_PI_2 * (_fTime / _fModeTime));
+
+					_MoveLoc += _Dir * _fModeSpeed * dt * PIXEL_PERM;
+					if (_iFree != 0) {
+						get = _FreeList.front();
+						get->setPosition(_MoveLoc);
+						get->setScale(sint);
+						get->setSpin(_Spin);
+						get->setDirAngle(_DirAngle);
+						get->setOpacity(_Opacity);
+						get->setLifetime(_Lifetime);
+						get->setColor(_color);
+						get->setSprite(_SpriteName);
+						get->setDirection(_Dir);
+						get->setBehavior(FIREWORKSTYLE);
+						_FreeList.pop_front();
+						_InUsedList.push_front(get);
+						_iFree--;
+						_iInUsed++;
+					}
+					_fTime += dt;
+					if (_fTime > _fModeTime) {
+						_bfireworkTail = false;
+						_bfireworkPop = true;
+						_fTime = 0;
+						_fModeTime = 1.0f;
+					}
+				}
+				else if (_bfireworkPop) {
+					float sint = cosf(M_PI * (_fTime / _fModeTime));
+					float cost = cosf(M_PI_2 * (_fTime / _fModeTime));
 					float t = rand() % 101 / 100.0f;
-					t = 45.0f - t * 45.0f * 2;
+					t = 180.0f - t * 180.0f * 2;
 					_DirAngle = (t + _Direction);
 					t = (t + _Direction) * M_PI / 180.0f;
-					_Dir = Vec2(cosf(t), sinf(t));
-
-					_fModeSpeed = rand() % 10 + 10.0f;
+					Vec2 dir = Vec2(cosf(t), sinf(t));
+					if (_iFree > 10) {
+						for (int i = 0; i < 10; i++)
+						{
+							get = _FreeList.front();
+							get->setPosition(_MoveLoc);
+							get->setScale(cost);
+							get->setGravity(_Gravity);
+							get->setSpin(_Spin);
+							get->setDirAngle(_DirAngle);
+							get->setOpacity(_Opacity);
+							get->setSpeed(_Speed);
+							get->setLifetime(_Lifetime);
+							get->setColor(_color);
+							get->setSprite(_SpriteName);
+							//float t = _Direction * M_PI / 180.0f;
+							get->setDirection(dir);
+							get->setWindDir(_WindDir);
+							get->setWindForce(_WindForce);
+							get->setBehavior(FIREWORKPOP);
+							_FreeList.pop_front();
+							_InUsedList.push_front(get);
+							_iFree--;
+							_iInUsed++;
+						}
+					}
+					_fTime += dt;
+					if (_fTime > _fModeTime) {
+						_bModeEnd = true;
+						_bfireworkTail = true;
+						_bfireworkPop = false;
+						_fTime = 0;
+						_fModeTime = 1.0f + (rand() % 200 / 100.0f);
+					}
 				}
-				float sint = sinf(M_PI_2 * (_fTime / _fModeTime));
-
-				_MoveLoc += _Dir * _fModeSpeed * dt * PIXEL_PERM;
+				break;
+			case FIRE:
+				_bModeEnd = false;
+				n = (int)(_fTime * _iTotEmitterNum);
+				if (n > _iCurEmitterNum) {
+					for (int i = 0; i < n - _iCurEmitterNum; i++)
+					{
+						if (_iFree != 0) {
+							get = _FreeList.front();
+							get->setPosition(_emitterPos);
+							get->setGravity(_Gravity);
+							get->setSpin(_Spin);
+							get->setOpacity(_Opacity);
+							get->setSpeed(_Speed);
+							get->setLifetime(_Lifetime);
+							get->setColor(_color);
+							string sprite = "fire.png";
+							get->setSprite(sprite);
+							float t = rand() % 101 / 100.0f;
+							t = 90.0f - t * 90.0f * 2;
+							_Direction = 90;
+							t = (t + _Direction) * M_PI / 180.0f;
+							Vec2 dir = Vec2(cosf(t), sinf(t));
+							get->setDirection(dir);
+							get->setWindDir(_WindDir);
+							get->setWindForce(_WindForce);
+							get->setBehavior(FIRE);
+							_FreeList.pop_front();
+							_InUsedList.push_front(get);
+							_iFree--;
+							_iInUsed++;
+						}
+					}
+					_iCurEmitterNum = n;
+				}
+				_fTime += dt;
+				if (_fTime >= 1.0f) {
+					_bModeEnd = true;
+					_fTime -= 1.0f;
+					if (_iCurEmitterNum >= _iTotEmitterNum)_iCurEmitterNum -= _iTotEmitterNum;
+					else _iCurEmitterNum = 0;
+				}
+				break;
+			case LUCKY:
+				if (_bluckyDraw && !_bluckyClear) {
+					if (_fTime == 0) {
+						_bModeEnd = false;
+						_fTheta = 0;
+						_fModeSpeed = 10.0f;
+					}
+					float t, r;
+					//t = 2 * M_PI * _fTheta / 180.0f;
+					t = 2 * M_PI * _fTime / _fModeTime;
+					r = 50.0f * sinf(2 * t);
+					_Dir = Vec2(r * cosf(t), r * sinf(t));
+					_MoveLoc = _emitterPos + _Dir * dt * _fModeSpeed * PIXEL_PERM;
+					if (_iFree != 0) {
+						get = _FreeList.front();
+						get->setPosition(_MoveLoc);
+						get->_range = _emitterPos;
+						get->setScale(1.0f);
+						get->setSpin(_Spin);
+						get->setOpacity(_Opacity);
+						get->setLifetime(_Lifetime);
+						get->setColor(_color);
+						get->setSprite(_SpriteName);
+						get->setDirection(_Dir);
+						get->setWindDir(_WindDir);
+						get->setWindForce(_WindForce);
+						get->setBehavior(LUCKY);
+						_FreeList.pop_front();
+						_InUsedList.push_front(get);
+						_iFree--;
+						_iInUsed++;
+					}
+					_fTime += dt;
+					if (_fTime > _fModeTime) {
+						//_bModeEnd = true;
+						_bluckyDraw = false;
+						_bluckyClear = true;
+						_fModeTime = 10.0f;
+						_fTime = 0;
+					}
+				}
+				else if (_bluckyClear) {
+					_fTime += dt;
+					if (_fTime > _fModeTime) {
+						_bModeEnd = true;
+						_bluckyDraw = true;
+						_bluckyClear = false;
+						_fModeTime = 5.0f;
+						_fTime = 0;
+					}
+				}
+				break;
+			case RAIN:
+				if (_fTime == 0) {
+					_bModeEnd = false;
+				}
 				if (_iFree != 0) {
+					_bModeEnd = true;
 					get = _FreeList.front();
-					get->setPosition(_MoveLoc);
-					get->setScale(sint);
+					get->setPosition(_emitterPos);
+					get->setScale(1.0f);
 					get->setSpin(_Spin);
-					get->setDirAngle(_DirAngle);
 					get->setOpacity(_Opacity);
 					get->setLifetime(_Lifetime);
 					get->setColor(_color);
-					get->setSprite(_SpriteName);
-					get->setDirection(_Dir);
-					get->setBehavior(FIREWORKSTYLE);
+					string sprite = "raindrop.png";
+					get->setSprite(sprite);
+					get->setWindDir(_WindDir);
+					get->setWindForce(_WindForce);
+					get->setDirAngle(_WindAngle);
+					get->setBehavior(RAIN);
 					_FreeList.pop_front();
 					_InUsedList.push_front(get);
 					_iFree--;
 					_iInUsed++;
 				}
 				_fTime += dt;
-				if (_fTime > _fModeTime) {
-					_bfireworkTail = false;
-					_bfireworkPop = true;
+				if (_fTime >= _fModeTime) {
+					_bModeEnd = false;
 					_fTime = 0;
-					_fModeTime = 1.0f;
 				}
-			}
-			else if (_bfireworkPop) {
-				float sint = cosf(M_PI * (_fTime / _fModeTime));
-				float cost = cosf(M_PI_2 * (_fTime / _fModeTime));
-				float t = rand() % 101 / 100.0f;
-				t = 180.0f - t * 180.0f * 2;
-				_DirAngle = (t + _Direction);
-				t = (t + _Direction) * M_PI / 180.0f;
-				Vec2 dir = Vec2(cosf(t), sinf(t));
-				if (_iFree > 10) {
-					for (int i = 0; i < 10; i++)
-					{
+				break;
+			case SNOW:
+				if (_fTime == 0) {
+					_bModeEnd = false;
+				}
+				if (_iFree != 0) {
+					_bModeEnd = true;
+					get = _FreeList.front();
+					get->setPosition(_emitterPos);
+					get->setSpin(_Spin);
+					get->setGravity(_Gravity);
+					get->setOpacity(_Opacity);
+					get->setLifetime(_Lifetime);
+					get->setColor(Color3B::GRAY);
+					ostr.clear();
+					num = random() % 5 + 1;
+					ostr << "snow_" << num << ".png";
+					sprite = ostr.str();
+					get->setSprite(sprite);
+					get->setWindDir(_WindDir);
+					get->setWindForce(_WindForce);
+					get->setDirAngle(_WindAngle);
+					get->setBehavior(SNOW);
+					_FreeList.pop_front();
+					_InUsedList.push_front(get);
+					_iFree--;
+					_iInUsed++;
+				}
+				_fTime += dt;
+				if (_fTime >= _fModeTime) {
+					_bModeEnd = false;
+					_fTime = 0;
+				}
+			break;
+			case LOVE:
+				if (CEmitter::getInstance()->update(dt)) {
+					if (_fTime == 0) {
+						_bModeEnd = false;
+					}
+					if (_iFree != 0) {
+						_bModeEnd = true;
 						get = _FreeList.front();
-						get->setPosition(_MoveLoc);
-						get->setScale(cost);
-						get->setGravity(_Gravity);
+						get->setPosition(_emitterPos);
 						get->setSpin(_Spin);
-						get->setDirAngle(_DirAngle);
 						get->setOpacity(_Opacity);
-						get->setSpeed(_Speed);
-						get->setLifetime(_Lifetime);
-						get->setColor(_color);
+						float cost;
+						cost = cosf(M_PI_2 * (_fTime / _fModeTime));
+						get->setLifetime(10.0f * cost);
 						get->setSprite(_SpriteName);
-						//float t = _Direction * M_PI / 180.0f;
-						get->setDirection(dir);
 						get->setWindDir(_WindDir);
 						get->setWindForce(_WindForce);
-						get->setBehavior(FIREWORKPOP);
+						get->setDirAngle(_WindAngle);
+						get->setBehavior(LOVE);
 						_FreeList.pop_front();
 						_InUsedList.push_front(get);
 						_iFree--;
 						_iInUsed++;
+					}
+				}
+				else {
+					if (_fTime >= _fModeTime) {
+						_bModeEnd = false;
+						_fTime = 0;
 					}
 				}
 				_fTime += dt;
-				if (_fTime > _fModeTime) {
-					_bModeEnd = true;
-					_bfireworkTail = true;
-					_bfireworkPop = false;
-					_fTime = 0;
-					_fModeTime = 1.0f + (rand() % 200 / 100.0f);
-				}
-			}
-			break;
-		case FIRE:
-			_bModeEnd = false;
-			n = (int)(_fTime * _iTotEmitterNum);
-			if (n > _iCurEmitterNum) {
-				for (int i = 0; i < n - _iCurEmitterNum; i++)
-				{
-					if (_iFree != 0) {
-						get = _FreeList.front();
-						get->setPosition(_emitterPos);
-						get->setGravity(_Gravity);
-						get->setSpin(_Spin);
-						get->setOpacity(_Opacity);
-						get->setSpeed(_Speed);
-						get->setLifetime(_Lifetime);
-						get->setColor(_color);
-						string sprite = "fire.png";
-						get->setSprite(sprite);
-						float t = rand() % 101 / 100.0f;
-						t = 90.0f - t * 90.0f * 2;
-						_Direction = 90;
-						t = (t + _Direction) * M_PI / 180.0f;
-						Vec2 dir = Vec2(cosf(t), sinf(t));
-						get->setDirection(dir);
-						get->setWindDir(_WindDir);
-						get->setWindForce(_WindForce);
-						get->setBehavior(FIRE);
-						_FreeList.pop_front();
-						_InUsedList.push_front(get);
-						_iFree--;
-						_iInUsed++;
-					}
-				}
-				_iCurEmitterNum = n;
-			}
-			_fTime += dt;
-			if (_fTime >= 1.0f) {
-				_bModeEnd = true;
-				_fTime -= 1.0f;
-				if (_iCurEmitterNum >= _iTotEmitterNum)_iCurEmitterNum -= _iTotEmitterNum;
-				else _iCurEmitterNum = 0;
-			}
-			break;
-		case Lucky:
-			if (_fTime == 0) {
-				_bModeEnd = false;
-				_MoveLoc = _emitterPos;
-				_DirAngle = 0;
-			}
-			float t, r;
-			_DirAngle++;
-			t = _DirAngle * M_PI / 180.0f;
-			r = 5.0f * sinf(2 * t);
-			_Dir = Vec2(r * cosf(t), r * sinf(t));
-			_MoveLoc += _Dir * dt * PIXEL_PERM;
-			if (_iFree != 0) {
-				get = _FreeList.front();
-				get->setPosition(_MoveLoc);
-				get->setScale(1.0f);
-				get->setSpin(_Spin);
-				get->setOpacity(_Opacity);
-				get->setLifetime(_Lifetime);
-				get->setColor(_color);
-				get->setSprite(_SpriteName);
-				get->setDirection(_Dir);
-				get->setBehavior(Lucky);
-				_FreeList.pop_front();
-				_InUsedList.push_front(get);
-				_iFree--;
-				_iInUsed++;
-			}
-			_fTime += dt;
-			break;
+				break;
 		default:
 			break;
 		}
@@ -289,9 +409,22 @@ void CParticleSystem::setMode(int Mode) {
 		_fModeTime = 3.0f;
 		_iTotEmitterNum = 100;
 		break;
-	case Lucky:
+	case LUCKY:
 		_fTime = 0;
-		_fModeTime = 10.0f;
+		_fModeTime = 5.0f;
+		_bluckyDraw = true;
+		_bluckyClear = false;
+		break;
+	case RAIN:
+		_fTime = 0;
+		_fModeTime = 5.0f;
+		break;
+	case SNOW:
+		_fTime = 0;
+		_fModeTime = 5.0f;
+	case LOVE:
+		_fTime = 0;
+		_fModeTime = 5.0f;
 		break;
 	default:
 		break;
@@ -369,6 +502,7 @@ void CParticleSystem::setBlue(float Blue) {
 
 void CParticleSystem::setWindDir(float WindDir) {
 	list <CParticle*>::iterator it;
+	_WindAngle = WindDir;
 	float t = WindDir * M_PI / 180.0f;
 	cocos2d::Point dir = Vec2(cosf(t), sinf(t));
 	_WindDir = dir;
@@ -376,6 +510,7 @@ void CParticleSystem::setWindDir(float WindDir) {
 		for (it = _InUsedList.begin(); it != _InUsedList.end(); it++)
 		{
 			(*it)->setWindDir(_WindDir);
+			(*it)->setDirAngle(_WindAngle);
 		}
 	}
 }

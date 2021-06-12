@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "cocostudio/CocoStudio.h"
 #include "CButton.h"
+#include "CParticle.h"
 
 using namespace std;
 
@@ -18,11 +19,6 @@ enum Style {
 #define EMITTERBTN 0
 #define STYLEBTN 1
 #define MODEBTN 2
-
-#define FIREWORKSTYLE 6
-#define FIRE 8
-#define Lucky 10
-#define EMITTER 99
 
 class CButtonGroup
 {
@@ -59,6 +55,9 @@ private:
 	CButton* _FireworkBtn;
 	CButton* _FireBtn;
 	CButton* _LuckyBtn;
+	CButton* _RainBtn;
+	CButton* _SnowBtn;
+	CButton* _LoveBtn;
 
 	Style _style;
 	int _Mode;
