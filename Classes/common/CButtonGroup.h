@@ -5,8 +5,6 @@
 #include "CButton.h"
 #include "CParticle.h"
 
-using namespace std;
-
 enum Style {
 	FLARE,
 	BUBBLE,
@@ -30,6 +28,8 @@ public:
 	static void Destroy();
 
 	void init(cocos2d::Node &root, cocos2d::Scene& stage);
+	void setModeVisible(bool visible);
+	void setSpriteVisible(bool visible);
 	bool getBtnState(int type);
 	std::string getBtnSprite();
 	int getBtnMode();
@@ -40,6 +40,12 @@ public:
 private:
 	cocos2d::Node* _uiRoot;
 	CButton* _EmitterBtn;
+
+	//listBtn
+	CButton* _OpenSpriteBtn;
+	CButton* _CloseSpriteBtn;
+	CButton* _OpenModeBtn;
+	CButton* _CloseModeBtn;
 
 	//Particle Style
 	CButton* _curStyleBtn;
@@ -61,5 +67,4 @@ private:
 
 	Style _style;
 	int _Mode;
-	bool _click;
 };

@@ -178,7 +178,7 @@ void CUIView::TypeEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType typ
 	if (type == Slider::EventType::ON_PERCENTAGE_CHANGED) {
 		const Slider* slider = dynamic_cast<cocos2d::ui::Slider*>(sender);
 		int persent = slider->getPercent();
-		int iType = persent / 20;
+		int iType = persent / 14;
 		_TypeBMValue->setString(StringUtils::format("%d", iType));
 		_ParticleSystem->setType(iType);
 	}

@@ -27,6 +27,8 @@ void CParticle::setProperty(std::string pngname, cocos2d::Scene& stage) {
 bool CParticle::update(float dt) {
 	float sint, cost , sin2t;
 	float cos2t;
+	Point windDir;
+	Point dir;
 	if (!_bVisible && _fTime == 0) {
 		setVisible(true);
 		_Particle->setPosition(_Pos);
@@ -102,6 +104,31 @@ bool CParticle::update(float dt) {
 			_Pos.y += (_Dir.y * cost * _fSpeed + (_windDir.y * _fWindForce * sint) + dy) * dt * PIXEL_PERM;
 			_Particle->setPosition(_Pos);
 			break;
+		case STARSTYLE:
+			sint = sinf(M_PI * (_fTime / _fLifeTime));
+			cost = cosf(M_PI_2 * (_fTime / _fLifeTime));
+			_fSize = 1 + sint;
+			_Particle->setScale(_fSize);
+			_Particle->setOpacity(_fOpacity * cost);
+			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
+			dy = GRAVITY_Y(_fTime, dt, _fGravity);
+			_Pos.x += (_Dir.x * cost * _fSpeed + (_windDir.x * _fWindForce * sint)) * dt * PIXEL_PERM;
+			_Pos.y += (_Dir.y * cost * _fSpeed + (_windDir.y * _fWindForce * sint) + dy) * dt * PIXEL_PERM;
+			_Particle->setPosition(_Pos);
+			break;
+		case FLOWERSTYLE:
+			sint = sinf(M_PI * (_fTime / _fLifeTime));
+			cost = cosf(M_PI_2 * (_fTime / _fLifeTime));
+			_fSize = 1 + sint;
+			_Particle->setScale(_fSize);
+			_Particle->setOpacity(_fOpacity * cost);
+			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
+			
+			dy = GRAVITY_Y(_fTime, dt, _fGravity);
+			_Pos.x += (_Dir.x * cost * _fSpeed + (_windDir.x * _fWindForce * sint)) * dt * PIXEL_PERM;
+			_Pos.y += (_Dir.y * cost * _fSpeed + (_windDir.y * _fWindForce * sint) + dy) * dt * PIXEL_PERM;
+			_Particle->setPosition(_Pos);
+			break;
 		case EMITTER:
 			sint = sinf(M_PI * (_fTime / _fLifeTime));
 			cost = cosf(M_PI_2 * (_fTime / _fLifeTime));
@@ -127,8 +154,8 @@ bool CParticle::update(float dt) {
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 			
 			dy = GRAVITY_Y(_fTime, dt, _fGravity);
-			_Pos.x += (_Dir.x * cost * _fSpeed + (_windDir.x * _fWindForce * sint)) * dt * PIXEL_PERM;
-			_Pos.y += (_Dir.y * cost * _fSpeed + (_windDir.y * _fWindForce * sint) + dy) * dt * PIXEL_PERM;
+			_Pos.x += (_Dir.x * cost * _fSpeed ) * dt * PIXEL_PERM;
+			_Pos.y += (_Dir.y * cost * _fSpeed + dy) * dt * PIXEL_PERM;
 			_Particle->setPosition(_Pos);
 			break;
 		case FIREWORKPOP:
@@ -167,12 +194,13 @@ bool CParticle::update(float dt) {
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 
-			if (_windDir.y < 0) {
-				_windDir.y = 0;
+			windDir = _windDir;
+			if (windDir.y < 0) {
+				windDir.y = 0;
 			}
 			
-			_Pos.x += (_Dir.x * cos2t * _fSpeed + (_windDir.x * (_fWindForce * 0.25f) * sint)) * dt * PIXEL_PERM;
-			_Pos.y += (_Dir.y * sin2t * _fSpeed + (_windDir.y * (_fWindForce * 0.25f) * sint)) * dt * PIXEL_PERM;
+			_Pos.x += (_Dir.x * cos2t * _fSpeed + (windDir.x * (_fWindForce * 0.25f) * sint)) * dt * PIXEL_PERM;
+			_Pos.y += (_Dir.y * sin2t * _fSpeed + (windDir.y * (_fWindForce * 0.25f) * sint)) * dt * PIXEL_PERM;
 
 			_Particle->setPosition(_Pos);
 			break;
@@ -294,7 +322,6 @@ bool CParticle::update(float dt) {
 			sint = sinf(M_PI * (_fTime / _fLifeTime));
 			cost = cosf(M_PI_2 * (_fTime / _fLifeTime));
 			sin2t = sinf(M_PI_2 * (_fTime / _fLifeTime));
-			cos2t = cosf(M_PI * (_fTime * 2 / _fLifeTime));
 			float size;
 			size = _fSize * 1.0f * sin2t;
 			_Particle->setScale(size);
@@ -302,8 +329,8 @@ bool CParticle::update(float dt) {
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 			dy = GRAVITY_Y(_fTime, dt, _fGravity);
-			_Pos.x += (_Dir.x * _fSpeed + (_windDir.x * _fWindForce * sint)) * dt * PIXEL_PERM;
-			_Pos.y += (_Dir.y * _fSpeed + (_windDir.y * _fWindForce * sint) + dy) * dt * PIXEL_PERM;
+			_Pos.x += ((_windDir.x * _fWindForce * sint)) * dt * PIXEL_PERM;
+			_Pos.y += ((_windDir.y * _fWindForce * sint) + dy) * dt * PIXEL_PERM;
 			_Particle->setPosition(_Pos);
 
 			if (_fTime > _fModeTime) {
@@ -334,8 +361,8 @@ bool CParticle::update(float dt) {
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 			dy = GRAVITY_Y(_fTime, dt, _fGravity);
-			_Pos.x += (_Dir.x * cos2t * _fSpeed + (_windDir.x * _fWindForce * sint * 2.0f)) * dt * PIXEL_PERM;
-			_Pos.y += (_Dir.y * cost * _fSpeed + (_windDir.y * _fWindForce * sint * 2.0f) + dy) * dt * PIXEL_PERM;
+			_Pos.x += (_Dir.x * cos2t * _fSpeed + (_windDir.x * _fWindForce * sint * 3.0f)) * dt * PIXEL_PERM;
+			_Pos.y += (_Dir.y * cost * _fSpeed + (_windDir.y * _fWindForce * sint * 3.0f) + dy) * dt * PIXEL_PERM;
 			_Particle->setPosition(_Pos);
 			break;
 		case LOVE:
@@ -408,7 +435,7 @@ void CParticle::setBehavior(int type) {
 		float sint, cost, cos2t, cos3t, cos4t;
 		sint = sinf(t); cost = cosf(t);
 		cos2t = cosf(2 * t); cos3t = cosf(3 * t); cos4t = cosf(4 * t);
-		_Dir.x = 16 * sint * sint * sint * 0.1f;
+		_Dir.x = (16 * sint * sint * sint) * 0.1f;
 		_Dir.y = (13 * cost - 5 * cos2t - 2 * cos3t - cos4t) * 0.1f;
 		//_Dir.x = 16 * sint * sint * sint;
 		//_Dir.y = 13 * cost - 5 * cos2t - 2 * cos3t - cos4t;
@@ -426,6 +453,33 @@ void CParticle::setBehavior(int type) {
 		_Dir.x = 0.25f * sint * (e - 2 * cos4t - sin512t);
 		_Dir.y = 0.25f * cost * (e - 2 * cos4t - sin512t);
 		_iType = BUTTERFLYSTYLE;
+		break;
+	case STARSTYLE:
+		_fTime = 0;
+		_fLifeTime = 1.0f + LIFE_NOISE(0.15f);
+		_color = Color3B(64 + rand() % 128, 64 + rand() % 128, 0 + rand() % 128);
+		_fSize = 1;
+		t = 2.0f * M_PI * (rand() % 101 / 100.0f);
+		float sin5t, r;
+		sint = sinf(t); cost = cosf(t);
+		sin5t = sinf(_fDirAngle - 5 * t);
+		r = 5.0f - sin5t;
+		_Dir.x = r * cost * 0.5f;
+		_Dir.y = r * sint * 0.5f;
+		_iType = STARSTYLE;
+		break;
+	case FLOWERSTYLE:
+		_fTime = 0;
+		_fLifeTime = 1.0f + LIFE_NOISE(0.15f);
+		_color = Color3B(64 + rand() % 128, 0 + rand() % 128, 0 + rand() % 128);
+		_fSize = 1;
+		t = 2.0f * M_PI * (rand() % 101 / 100.0f);
+		sint = sinf(t); cost = cosf(t);
+		sin5t = sinf(_fDirAngle - 5 * t); 
+		r = 1.0f - sin5t;
+		_Dir.x = r * cost;
+		_Dir.y = r * sint;
+		_iType = FLOWERSTYLE;
 		break;
 	case EMITTER:
 		_fTime = 0;
@@ -509,7 +563,7 @@ void CParticle::setBehavior(int type) {
 		_Dir.x = 0;
 		_Dir.y = 0;
 		_fSpeed = 0;
-		_fModeTime = 0.5f + noise;
+		_fModeTime = 0.75f + noise;
 		_bChange = false;
 		_iType = SNOW;
 		break;

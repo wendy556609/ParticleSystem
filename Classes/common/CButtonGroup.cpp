@@ -7,6 +7,11 @@ CButtonGroup* _SButtonGroup;
 CButtonGroup::CButtonGroup() {
 	_uiRoot = nullptr;
 
+	_OpenSpriteBtn = nullptr;
+	_CloseSpriteBtn = nullptr;
+	_OpenModeBtn = nullptr;
+	_CloseModeBtn = nullptr;
+
 	_curModeBtn = nullptr;
 	_curStyleBtn = nullptr;
 	_EmitterBtn = nullptr;
@@ -19,11 +24,14 @@ CButtonGroup::CButtonGroup() {
 
 	_FireworkBtn = nullptr;
 	_FireBtn = nullptr;
-
-	_click = false;
 }
 
 CButtonGroup::~CButtonGroup() {
+	CC_SAFE_DELETE(_OpenSpriteBtn);
+	CC_SAFE_DELETE(_CloseSpriteBtn);
+	CC_SAFE_DELETE(_OpenModeBtn);
+	CC_SAFE_DELETE(_CloseModeBtn);
+
 	CC_SAFE_DELETE(_EmitterBtn);
 
 	CC_SAFE_DELETE(_BubbleBtn);
@@ -35,6 +43,10 @@ CButtonGroup::~CButtonGroup() {
 
 	CC_SAFE_DELETE(_FireworkBtn);
 	CC_SAFE_DELETE(_FireBtn);
+	CC_SAFE_DELETE(_LuckyBtn);
+	CC_SAFE_DELETE(_RainBtn);
+	CC_SAFE_DELETE(_SnowBtn);
+	CC_SAFE_DELETE(_LoveBtn);
 }
 
 CButtonGroup* CButtonGroup::getInstance() {
@@ -50,8 +62,38 @@ void CButtonGroup::init(cocos2d::Node& root, cocos2d::Scene& stage) {
 	_uiRoot = &root;
 	_style = FLARE;
 
+	_OpenSpriteBtn = new(nothrow)CButton();
+	auto* loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("spriteOpen_Btn"));
+	loc->setVisible(false);
+	_OpenSpriteBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+	_OpenSpriteBtn->setIconSprite("arrow.png");
+	_OpenSpriteBtn->setIconReverse();
+	_OpenSpriteBtn->_isOn = false;
+
+	_CloseSpriteBtn = new(nothrow)CButton();
+	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("spriteClose_Btn"));
+	loc->setVisible(false);
+	_CloseSpriteBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+	_CloseSpriteBtn->setIconSprite("arrow.png");
+	_CloseSpriteBtn->_isOn = false;
+
+	_OpenModeBtn = new(nothrow)CButton();
+	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("modeOpen_Btn"));
+	loc->setVisible(false);
+	_OpenModeBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+	_OpenModeBtn->setIconSprite("arrow.png");
+	_OpenModeBtn->setIconReverse();
+	_OpenModeBtn->_isOn = false;
+
+	_CloseModeBtn = new(nothrow)CButton();
+	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("modeClose_Btn"));
+	loc->setVisible(false);
+	_CloseModeBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+	_CloseModeBtn->setIconSprite("arrow.png");
+	_CloseModeBtn->_isOn = false;
+
 	_EmitterBtn = new(nothrow)CButton();
-	auto* loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("emitterpos"));
+	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("emitterpos"));
 	loc->setVisible(false);
 	_EmitterBtn->setSprite("emittertd.png", "emitteron.png", "emitteroff.png", loc->getPosition(), stage);
 
@@ -100,31 +142,40 @@ void CButtonGroup::init(cocos2d::Node& root, cocos2d::Scene& stage) {
 	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("firework_Btn"));
 	loc->setVisible(false);
 	_FireworkBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+	_FireworkBtn->setIconSprite("firework.png");
 
 	_FireBtn = new(nothrow)CButton();
 	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("fire_Btn"));
 	loc->setVisible(false);
 	_FireBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+	_FireBtn->setIconSprite("fire_icon.png");
 
 	_LuckyBtn = new(nothrow)CButton();
 	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("lucky_Btn"));
 	loc->setVisible(false);
 	_LuckyBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+	_LuckyBtn->setIconSprite("Lucky.png");
 
 	_RainBtn = new(nothrow)CButton();
 	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("rain_Btn"));
 	loc->setVisible(false);
 	_RainBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+	_RainBtn->setIconSprite("raindrop.png");
 
 	_SnowBtn = new(nothrow)CButton();
 	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("snow_Btn"));
 	loc->setVisible(false);
 	_SnowBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+	_SnowBtn->setIconSprite("snow_1.png");
 
 	_LoveBtn = new(nothrow)CButton();
 	loc = dynamic_cast<cocos2d::Sprite*>(_uiRoot->getChildByName("love_Btn"));
 	loc->setVisible(false);
 	_LoveBtn->setSprite("runon.png", "runon.png", "runnormal.png", loc->getPosition(), stage);
+	_LoveBtn->setIconSprite("LOVE.png");
+
+	setSpriteVisible(false);
+	setModeVisible(false);
 }
 
 bool CButtonGroup::getBtnState(int type) {
@@ -220,9 +271,41 @@ std::string CButtonGroup::getBtnSprite() {
 	return _FlareBtn->getSpriteName();
 }
 
+void CButtonGroup::setSpriteVisible(bool visible) {
+	_FlareBtn->setVisible(visible);
+	_BubbleBtn->setVisible(visible);
+	_CometBtn->setVisible(visible);
+	_CircleBtn->setVisible(visible);
+	_CloudBtn->setVisible(visible);
+	_SparkBtn->setVisible(visible);
+	_CloseSpriteBtn->setVisible(visible);
+}
+
+void CButtonGroup::setModeVisible(bool visible) {
+	_FireworkBtn->setVisible(visible);
+	_FireBtn->setVisible(visible);
+	_LuckyBtn->setVisible(visible);
+	_RainBtn->setVisible(visible);
+	_SnowBtn->setVisible(visible);
+	_LoveBtn->setVisible(visible);
+	_CloseModeBtn->setVisible(visible);
+}
+
 bool CButtonGroup::onTouchBegan(const cocos2d::Point& touchLoc) {
 	if (_EmitterBtn->onTouchBegan(touchLoc)) {
-		_click = true;
+		return true;
+	}
+
+	if (_OpenSpriteBtn->onTouchBegan(touchLoc)) {
+		return true;
+	}
+	else if (_CloseSpriteBtn->onTouchBegan(touchLoc)) {
+		return true;
+	}
+	else if (_OpenModeBtn->onTouchBegan(touchLoc)) {
+		return true;
+	}
+	else if (_CloseModeBtn->onTouchBegan(touchLoc)) {
 		return true;
 	}
 
@@ -273,6 +356,19 @@ bool CButtonGroup::onTouchMoved(const cocos2d::Point& touchLoc) {
 		return true;
 	}
 
+	if (_OpenSpriteBtn->onTouchMoved(touchLoc)) {
+		return true;
+	}
+	else if (_CloseSpriteBtn->onTouchMoved(touchLoc)) {
+		return true;
+	}
+	else if (_OpenModeBtn->onTouchMoved(touchLoc)) {
+		return true;
+	}
+	else if (_CloseModeBtn->onTouchMoved(touchLoc)) {
+		return true;
+	}
+
 	//Particle Style
 	if (_FlareBtn->onTouchMoved(touchLoc)) {
 		return true;
@@ -317,7 +413,31 @@ bool CButtonGroup::onTouchMoved(const cocos2d::Point& touchLoc) {
 
 bool CButtonGroup::onTouchEnded(const cocos2d::Point& touchLoc) {
 	if (_EmitterBtn->onTouchEnded(touchLoc)) {
-		_click = false;
+		return true;
+	}
+
+	if (_OpenSpriteBtn->onTouchEnded(touchLoc)) {
+		setSpriteVisible(true);
+		_OpenSpriteBtn->setVisible(false);
+		_OpenSpriteBtn->setEnable(false);
+		return true;
+	}
+	else if (_CloseSpriteBtn->onTouchEnded(touchLoc)) {
+		setSpriteVisible(false);
+		_OpenSpriteBtn->setVisible(true);
+		_OpenSpriteBtn->setEnable(true);
+		return true;
+	}
+	else if (_OpenModeBtn->onTouchEnded(touchLoc)) {
+		setModeVisible(true);
+		_OpenModeBtn->setVisible(false);
+		_OpenModeBtn->setEnable(false);
+		return true;
+	}
+	else if (_CloseModeBtn->onTouchEnded(touchLoc)) {
+		setModeVisible(false);
+		_OpenModeBtn->setVisible(true);
+		_OpenModeBtn->setEnable(true);
 		return true;
 	}
 

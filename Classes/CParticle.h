@@ -18,18 +18,20 @@ using namespace std;
 #define EXPLOSION 3
 #define HEARTSTYLE 4
 #define BUTTERFLYSTYLE 5
+#define STARSTYLE 6
+#define FLOWERSTYLE 7
 
-#define FIREWORKSTYLE 6
-#define FIREWORKPOP 7
-#define FIRE 8
-#define SMOKE 9
-#define LUCKY 10
-#define CLEAR 11
-#define RAIN 12
-#define WAVE 13
-#define SNOW 14
-#define SNOWDROP 15
-#define LOVE 16
+#define FIREWORKSTYLE 8
+#define FIREWORKPOP 9
+#define FIRE 10
+#define SMOKE 11
+#define LUCKY 12
+#define CLEAR 13
+#define RAIN 14
+#define WAVE 15
+#define SNOW 16
+#define SNOWDROP 17
+#define LOVE 18
 #define EMITTER 99
 
 class CParticle

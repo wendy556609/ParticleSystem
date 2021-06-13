@@ -3,16 +3,21 @@
 #include "ui/CocosGUI.h" // For Cocos Studio 控制項元件
 #include "cocostudio/CocoStudio.h"
 
+using namespace std;
+
 class CButton
 {
 public:
+	bool _isOn;
 	CButton();
 	~CButton();
 
-	void setSprite(const std::string& touchname, const std::string& onname, const std::string& offname , cocos2d::Point pos , cocos2d::Scene& stage);
+	void setSprite(const std::string& touchname, const std::string& onname, const std::string& offname , cocos2d::Point pos , cocos2d::Node& stage);
 	void setIconSprite(const std::string& iconname);
 	void setInit();
 	void setEnable(bool enable);
+	void setVisible(bool visible);
+	void setIconReverse();
 
 	bool getBtnState();
 	std::string getSpriteName();
@@ -38,4 +43,5 @@ private:
 	bool _isTouch;
 	bool _switchOn;
 	bool _enable;
+	bool _visible;
 };

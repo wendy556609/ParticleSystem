@@ -614,8 +614,8 @@ void CParticleSystem::onTouchBegan(cocos2d::Point touchLoc) {
 		else return;
 		break;
 	case HEARTSTYLE:
-		if (_iFree > 100) {
-			for (int i = 0; i < 100; i++)
+		if (_iFree > 200) {
+			for (int i = 0; i < 200; i++)
 			{
 				get = _FreeList.front();
 				get->setPosition(touchLoc);
@@ -646,6 +646,54 @@ void CParticleSystem::onTouchBegan(cocos2d::Point touchLoc) {
 				get->setWindForce(_WindForce);
 				get->setSprite(_SpriteName);
 				get->setBehavior(BUTTERFLYSTYLE);
+				_FreeList.pop_front();
+				_InUsedList.push_front(get);
+				_iFree--;
+				_iInUsed++;
+			}
+		}
+		break;
+	case STARSTYLE:
+		if (_iFree > 200) {
+			float t = rand() % 101 / 100.0f;
+			t = 180 - t * 180 * 2;
+			_DirAngle = t;
+			for (int i = 0; i < 200; i++)
+			{
+				get = _FreeList.front();
+				get->setPosition(touchLoc);
+				get->setGravity(_Gravity);
+				get->setOpacity(_Opacity);
+				get->setSpeed(_Speed);
+				get->setDirAngle(_DirAngle);
+				get->setWindDir(_WindDir);
+				get->setWindForce(_WindForce);
+				get->setSprite(_SpriteName);
+				get->setBehavior(STARSTYLE);
+				_FreeList.pop_front();
+				_InUsedList.push_front(get);
+				_iFree--;
+				_iInUsed++;
+			}
+		}
+		break;
+	case FLOWERSTYLE:
+		if (_iFree > 200) {
+			float t = rand() % 101 / 100.0f;
+			t = 180 - t * 180 * 2;
+			_DirAngle = t;
+			for (int i = 0; i < 200; i++)
+			{
+				get = _FreeList.front();
+				get->setPosition(touchLoc);
+				get->setGravity(_Gravity);
+				get->setOpacity(_Opacity);
+				get->setSpeed(_Speed);
+				get->setDirAngle(_DirAngle);
+				get->setWindDir(_WindDir);
+				get->setWindForce(_WindForce);
+				get->setSprite(_SpriteName);
+				get->setBehavior(FLOWERSTYLE);
 				_FreeList.pop_front();
 				_InUsedList.push_front(get);
 				_iFree--;

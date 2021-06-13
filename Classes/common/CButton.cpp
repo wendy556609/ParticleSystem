@@ -13,6 +13,8 @@ CButton::CButton()
 	_switchOn = false;
 
 	_enable = true;
+
+	_isOn = true;
 }
 
 CButton::~CButton()
@@ -20,7 +22,7 @@ CButton::~CButton()
 
 }
 
-void CButton::setSprite(const std::string& touchname, const std::string& onname, const std::string& offname, cocos2d::Point pos, cocos2d::Scene& stage) {
+void CButton::setSprite(const std::string& touchname, const std::string& onname, const std::string& offname, cocos2d::Point pos, cocos2d::Node& stage) {
 	_touchSprite = Sprite::createWithSpriteFrameName(touchname);
 	_onSprite = Sprite::createWithSpriteFrameName(onname);
 	_offSprite = Sprite::createWithSpriteFrameName(offname);
@@ -52,6 +54,10 @@ void CButton::setIconSprite(const std::string& iconname) {
 	_Btn->addChild(_iconSprite);
 }
 
+void CButton::setIconReverse() {
+	_iconSprite->setScale(-1);
+}
+
 void CButton::setInit() {
 	_isTouch = true;
 	_switchOn = true;
@@ -66,6 +72,11 @@ void CButton::setInit() {
 
 void CButton::setEnable(bool enable) {
 	_enable = enable;
+}
+
+void CButton::setVisible(bool visible) {
+	_visible = visible;
+	_Btn->setVisible(visible);
 }
 
 void CButton::switchBtn() {
@@ -89,7 +100,7 @@ void CButton::switchBtn() {
 }
 
 bool CButton::onTouchBegan(const cocos2d::Point& touchLoc) {
-	if (_rect.containsPoint(touchLoc)) {
+	if (_rect.containsPoint(touchLoc) && _visible) {
 		_touchSprite->setVisible(true);
 		_onSprite->setVisible(false);
 		_offSprite->setVisible(false);
@@ -102,8 +113,47 @@ bool CButton::onTouchBegan(const cocos2d::Point& touchLoc) {
 }
 
 bool CButton::onTouchMoved(const cocos2d::Point& touchLoc) {
-	if (_isTouch) {
-		if (!_rect.containsPoint(touchLoc)) {
+	if (_isTouch && _visible) {
+		if (_isOn) {
+			if (!_rect.containsPoint(touchLoc)) {
+				if (_switchOn) {
+					_touchSprite->setVisible(false);
+					_onSprite->setVisible(true);
+					_offSprite->setVisible(false);
+				}
+				else {
+					_touchSprite->setVisible(false);
+					_onSprite->setVisible(false);
+					_offSprite->setVisible(true);
+
+					_Btn->setScale(1.0f);
+				}
+				_isTouch = false;
+				return false;
+			}
+		}
+		else {
+			if (!_rect.containsPoint(touchLoc)) {
+				_touchSprite->setVisible(false);
+				_onSprite->setVisible(false);
+				_offSprite->setVisible(true);
+
+				_Btn->setScale(1.0f);
+				_isTouch = false;
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	return false;
+}
+
+bool CButton::onTouchEnded(const cocos2d::Point& touchLoc) {
+	if (_rect.containsPoint(touchLoc) && _isTouch && _enable && _visible) {
+		if (_isOn) {
+			_isTouch = false;
+			_switchOn = !_switchOn;
 			if (_switchOn) {
 				_touchSprite->setVisible(false);
 				_onSprite->setVisible(true);
@@ -116,24 +166,10 @@ bool CButton::onTouchMoved(const cocos2d::Point& touchLoc) {
 
 				_Btn->setScale(1.0f);
 			}
-			_isTouch = false;
-			return false;
-		}
-		return true;
-	}
-	return false;
-}
-
-bool CButton::onTouchEnded(const cocos2d::Point& touchLoc) {
-	if (_rect.containsPoint(touchLoc) && _isTouch && _enable) {
-		_isTouch = false;
-		_switchOn = !_switchOn;
-		if (_switchOn) {
-			_touchSprite->setVisible(false);
-			_onSprite->setVisible(true);
-			_offSprite->setVisible(false);
 		}
 		else {
+			_isTouch = false;
+
 			_touchSprite->setVisible(false);
 			_onSprite->setVisible(false);
 			_offSprite->setVisible(true);
