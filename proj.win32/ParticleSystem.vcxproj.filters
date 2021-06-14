@@ -69,7 +69,7 @@
       <Filter>src\common</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\CUIView.h">
-      <Filter>win32</Filter>
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

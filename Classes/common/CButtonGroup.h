@@ -30,6 +30,7 @@ public:
 	void init(cocos2d::Node &root, cocos2d::Scene& stage);
 	void setModeVisible(bool visible);
 	void setSpriteVisible(bool visible);
+
 	bool getBtnState(int type);
 	std::string getBtnSprite();
 	int getBtnMode();

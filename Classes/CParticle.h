@@ -12,6 +12,7 @@ using namespace std;
 #define GRAVITY_Y(t,dt,g) ((g)*((t)+0.5f*(dt)))
 #define LIFE_NOISE(f) ((f)*(1.0f-(rand()%2001/1000.0f)))
 
+//clickMode
 #define TOUCHPOINT 0
 #define FALLPOINT 1
 #define RANDOMPOINT 2
@@ -21,6 +22,7 @@ using namespace std;
 #define STARSTYLE 6
 #define FLOWERSTYLE 7
 
+//emitterMode
 #define FIREWORKSTYLE 8
 #define FIREWORKPOP 9
 #define FIRE 10
@@ -68,7 +70,6 @@ private:
 	int _iType;
 public:
 	cocos2d::Point _range;
-	cocos2d::Point _BornPos;
 
 	CParticle();
 

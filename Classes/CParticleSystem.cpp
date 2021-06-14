@@ -547,6 +547,9 @@ void CParticleSystem::onTouchBegan(cocos2d::Point touchLoc) {
 			get->setSpeed(_Speed);
 			get->setWindDir(_WindDir);
 			get->setWindForce(_WindForce);
+			get->setLifetime(_Lifetime);
+			get->setColor(_color);
+			get->setSpin(_Spin);
 			get->setSprite(_SpriteName);
 			get->setBehavior(TOUCHPOINT);
 			_FreeList.pop_front();
@@ -565,6 +568,9 @@ void CParticleSystem::onTouchBegan(cocos2d::Point touchLoc) {
 			get->setSpeed(_Speed);
 			get->setWindDir(_WindDir);
 			get->setWindForce(_WindForce);
+			get->setLifetime(_Lifetime);
+			get->setColor(_color);
+			get->setSpin(_Spin);
 			get->setSprite(_SpriteName);
 			get->setBehavior(FALLPOINT);
 			_FreeList.pop_front();
@@ -583,6 +589,9 @@ void CParticleSystem::onTouchBegan(cocos2d::Point touchLoc) {
 			get->setSpeed(_Speed);
 			get->setWindDir(_WindDir);
 			get->setWindForce(_WindForce);
+			get->setLifetime(_Lifetime);
+			get->setColor(_color);
+			get->setSpin(_Spin);
 			get->setSprite(_SpriteName);
 			get->setBehavior(RANDOMPOINT);
 			_FreeList.pop_front();
@@ -603,6 +612,9 @@ void CParticleSystem::onTouchBegan(cocos2d::Point touchLoc) {
 				get->setSpeed(_Speed);
 				get->setWindDir(_WindDir);
 				get->setWindForce(_WindForce);
+				get->setLifetime(_Lifetime);
+				get->setColor(_color);
+				get->setSpin(_Spin);
 				get->setSprite(_SpriteName);
 				get->setBehavior(EXPLOSION);
 				_FreeList.pop_front();
@@ -624,6 +636,9 @@ void CParticleSystem::onTouchBegan(cocos2d::Point touchLoc) {
 				get->setSpeed(_Speed);
 				get->setWindDir(_WindDir);
 				get->setWindForce(_WindForce);
+				get->setLifetime(_Lifetime);
+				get->setColor(_color);
+				get->setSpin(_Spin);
 				get->setSprite(_SpriteName);
 				get->setBehavior(HEARTSTYLE);
 				_FreeList.pop_front();
@@ -644,6 +659,9 @@ void CParticleSystem::onTouchBegan(cocos2d::Point touchLoc) {
 				get->setSpeed(_Speed);
 				get->setWindDir(_WindDir);
 				get->setWindForce(_WindForce);
+				get->setLifetime(_Lifetime);
+				get->setColor(_color);
+				get->setSpin(_Spin);
 				get->setSprite(_SpriteName);
 				get->setBehavior(BUTTERFLYSTYLE);
 				_FreeList.pop_front();
@@ -668,6 +686,9 @@ void CParticleSystem::onTouchBegan(cocos2d::Point touchLoc) {
 				get->setDirAngle(_DirAngle);
 				get->setWindDir(_WindDir);
 				get->setWindForce(_WindForce);
+				get->setLifetime(_Lifetime);
+				get->setColor(_color);
+				get->setSpin(_Spin);
 				get->setSprite(_SpriteName);
 				get->setBehavior(STARSTYLE);
 				_FreeList.pop_front();
@@ -692,6 +713,9 @@ void CParticleSystem::onTouchBegan(cocos2d::Point touchLoc) {
 				get->setDirAngle(_DirAngle);
 				get->setWindDir(_WindDir);
 				get->setWindForce(_WindForce);
+				get->setLifetime(_Lifetime);
+				get->setColor(_color);
+				get->setSpin(_Spin);
 				get->setSprite(_SpriteName);
 				get->setBehavior(FLOWERSTYLE);
 				_FreeList.pop_front();
@@ -720,6 +744,9 @@ void CParticleSystem::onTouchMoved(cocos2d::Point touchLoc) {
 			get->setSpeed(_Speed);
 			get->setWindDir(_WindDir);
 			get->setWindForce(_WindForce);
+			get->setLifetime(_Lifetime);
+			get->setColor(_color);
+			get->setSpin(_Spin);
 			get->setSprite(_SpriteName);
 			get->setBehavior(TOUCHPOINT);
 			_FreeList.pop_front();
@@ -738,6 +765,9 @@ void CParticleSystem::onTouchMoved(cocos2d::Point touchLoc) {
 			get->setSpeed(_Speed);
 			get->setWindDir(_WindDir);
 			get->setWindForce(_WindForce);
+			get->setLifetime(_Lifetime);
+			get->setColor(_color);
+			get->setSpin(_Spin);
 			get->setSprite(_SpriteName);
 			get->setBehavior(FALLPOINT);
 			_FreeList.pop_front();
@@ -756,6 +786,9 @@ void CParticleSystem::onTouchMoved(cocos2d::Point touchLoc) {
 			get->setSpeed(_Speed);
 			get->setWindDir(_WindDir);
 			get->setWindForce(_WindForce);
+			get->setLifetime(_Lifetime);
+			get->setColor(_color);
+			get->setSpin(_Spin);
 			get->setSprite(_SpriteName);
 			get->setBehavior(RANDOMPOINT);
 			_FreeList.pop_front();

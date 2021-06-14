@@ -10,7 +10,6 @@ CEmitter* _SEmitter;
 
 CEmitter::CEmitter()
 {
-	//_LoveInit[1] = Point(857.5f, 540);
 	_LoveInit[0] = Point(612.5f, 540); _LoveInit[1] = Point(857.5f, 440); _LoveInit[2] = Point(1102.5f, 440); _LoveInit[3] = Point(1377.5f, 540);
 	_Emitter = nullptr;
 	_Change = nullptr;

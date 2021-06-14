@@ -421,7 +421,7 @@
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:248976ec986c57bb17588ea3ec619d2b:1988e4cbf287d56178cf76d3742ebf75:3eb85679269377fd24a9b91c756e1f27$</string>
+            <string>$TexturePacker:SmartUpdate:d349ae77fa2eb76b75fd21f5c8a6ca22:1988e4cbf287d56178cf76d3742ebf75:3eb85679269377fd24a9b91c756e1f27$</string>
             <key>textureFileName</key>
             <string>particletexture.png</string>
         </dict>

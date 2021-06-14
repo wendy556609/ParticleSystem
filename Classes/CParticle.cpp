@@ -48,6 +48,8 @@ bool CParticle::update(float dt) {
 			cost = cosf(M_PI_2 * (_fTime / _fLifeTime));
 			_fSize = 1 + sint * 2;
 			_Particle->setScale(_fSize);
+			angle = _fTime * _Spin;
+			_Particle->setRotation(angle);
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 			dy = GRAVITY_Y(_fTime, dt, _fGravity);
@@ -60,6 +62,8 @@ bool CParticle::update(float dt) {
 			cost = cosf(M_PI_2 * (_fTime / _fLifeTime));
 			_fSize = 1 + sint * 2;
 			_Particle->setScale(_fSize);
+			angle = _fTime * _Spin;
+			_Particle->setRotation(angle);
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 			dy = GRAVITY_Y(_fTime, dt, _fGravity);
@@ -72,6 +76,8 @@ bool CParticle::update(float dt) {
 			cost = cosf(M_PI_2 * (_fTime / _fLifeTime));
 			_fSize = 1 + sint;
 			_Particle->setScale(_fSize);
+			angle = _fTime * _Spin;
+			_Particle->setRotation(angle);
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 			dy = GRAVITY_Y(_fTime, dt, _fGravity);
@@ -84,6 +90,8 @@ bool CParticle::update(float dt) {
 			cost = cosf(M_PI_2 * (_fTime / _fLifeTime));
 			_fSize = 1 + sint;
 			_Particle->setScale(_fSize);
+			angle = _fTime * _Spin;
+			_Particle->setRotation(angle);
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 			dy = GRAVITY_Y(_fTime, dt, _fGravity);
@@ -97,6 +105,8 @@ bool CParticle::update(float dt) {
 			sin2t = 3 * sinf(2.0f * M_PI * (_fTime * 2.0f / _fLifeTime));
 			_fSize = 0.5f + sint;
 			_Particle->setScale(_fSize);
+			angle = _fTime * _Spin;
+			_Particle->setRotation(angle);
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 			dy = GRAVITY_Y(_fTime, dt, _fGravity);
@@ -109,6 +119,8 @@ bool CParticle::update(float dt) {
 			cost = cosf(M_PI_2 * (_fTime / _fLifeTime));
 			_fSize = 1 + sint;
 			_Particle->setScale(_fSize);
+			angle = _fTime * _Spin;
+			_Particle->setRotation(angle);
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 			dy = GRAVITY_Y(_fTime, dt, _fGravity);
@@ -121,6 +133,8 @@ bool CParticle::update(float dt) {
 			cost = cosf(M_PI_2 * (_fTime / _fLifeTime));
 			_fSize = 1 + sint;
 			_Particle->setScale(_fSize);
+			angle = _fTime * _Spin;
+			_Particle->setRotation(angle);
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(Color3B(INTENSITY(_color.r * (0.5f + sint)), INTENSITY(_color.g * (0.5f + sint)), INTENSITY(_color.b * (0.5f + sint))));
 			
@@ -388,8 +402,8 @@ void CParticle::setBehavior(int type) {
 	{
 	case TOUCHPOINT:
 		_fTime = 0;
-		_fLifeTime = 2.5f + LIFE_NOISE(0.15f);
-		_color = Color3B(64 + rand() % 128, 64 + rand() % 128, 64 + rand() % 128);
+		_fLifeTime = _fLifeTime + LIFE_NOISE(0.15f);
+		_color = Color3B(INTENSITY(_color.r + rand() % 64), INTENSITY(_color.g + rand() % 64), INTENSITY(_color.b + rand() % 64));
 		_fSize = 1;
 		_Dir.x = 0;
 		_Dir.y = 0;
@@ -397,8 +411,8 @@ void CParticle::setBehavior(int type) {
 		break;
 	case FALLPOINT:
 		_fTime = 0;
-		_fLifeTime = 2.5f + LIFE_NOISE(0.15f);
-		_color = Color3B(64 + rand() % 128, 64 + rand() % 128, 64 + rand() % 128);
+		_fLifeTime = _fLifeTime + LIFE_NOISE(0.15f);
+		_color = Color3B(INTENSITY(_color.r + rand() % 64), INTENSITY(_color.g + rand() % 64), INTENSITY(_color.b + rand() % 64));
 		_fSize = 1;
 		_Dir.x = 0;
 		_Dir.y = -1;
@@ -406,8 +420,8 @@ void CParticle::setBehavior(int type) {
 		break;
 	case RANDOMPOINT:
 		_fTime = 0;
-		_fLifeTime = 2.0f + LIFE_NOISE(0.2f);
-		_color = Color3B(64 + rand() % 128, 64 + rand() % 128, 64 + rand() % 128);
+		_fLifeTime = _fLifeTime + LIFE_NOISE(0.2f);
+		_color = Color3B(INTENSITY(_color.r + rand() % 64), INTENSITY(_color.g + rand() % 64), INTENSITY(_color.b + rand() % 64));
 		_fSize = 1;
 		_fSpeed = _fSpeed + (rand() % 100 / 100.0f);
 		t = 2.0f * M_PI * (rand() % 100 / 100.0f);
@@ -417,8 +431,8 @@ void CParticle::setBehavior(int type) {
 		break;
 	case EXPLOSION:
 		_fTime = 0;
-		_fLifeTime = 2.0f + LIFE_NOISE(0.2f);
-		_color = Color3B(64 + rand() % 128, 64 + rand() % 128, 64 + rand() % 128);
+		_fLifeTime = _fLifeTime + LIFE_NOISE(0.2f);
+		_color = Color3B(INTENSITY(_color.r + rand() % 64), INTENSITY(_color.g + rand() % 64), INTENSITY(_color.b + rand() % 64));
 		_fSize = 1;
 		_fSpeed = _fSpeed + (rand() % 100 / 100.0f);
 		t = 2.0f * M_PI * (rand() % 100 / 100.0f);
@@ -428,7 +442,7 @@ void CParticle::setBehavior(int type) {
 		break;
 	case HEARTSTYLE:
 		_fTime = 0;
-		_fLifeTime = 1.0f + LIFE_NOISE(0.15f);
+		_fLifeTime = _fLifeTime + LIFE_NOISE(0.15f);
 		_color = Color3B(64 + rand() % 128, 0 + rand() % 128, 0 + rand() % 128);
 		_fSize = 1;
 		t = 2.0f * M_PI * (rand() % 100 / 100.0f);
@@ -437,8 +451,6 @@ void CParticle::setBehavior(int type) {
 		cos2t = cosf(2 * t); cos3t = cosf(3 * t); cos4t = cosf(4 * t);
 		_Dir.x = (16 * sint * sint * sint) * 0.1f;
 		_Dir.y = (13 * cost - 5 * cos2t - 2 * cos3t - cos4t) * 0.1f;
-		//_Dir.x = 16 * sint * sint * sint;
-		//_Dir.y = 13 * cost - 5 * cos2t - 2 * cos3t - cos4t;
 		_iType = HEARTSTYLE;
 		break;
 	case BUTTERFLYSTYLE:
@@ -456,7 +468,7 @@ void CParticle::setBehavior(int type) {
 		break;
 	case STARSTYLE:
 		_fTime = 0;
-		_fLifeTime = 1.0f + LIFE_NOISE(0.15f);
+		_fLifeTime = _fLifeTime + LIFE_NOISE(0.15f);
 		_color = Color3B(64 + rand() % 128, 64 + rand() % 128, 0 + rand() % 128);
 		_fSize = 1;
 		t = 2.0f * M_PI * (rand() % 101 / 100.0f);
@@ -470,7 +482,7 @@ void CParticle::setBehavior(int type) {
 		break;
 	case FLOWERSTYLE:
 		_fTime = 0;
-		_fLifeTime = 1.0f + LIFE_NOISE(0.15f);
+		_fLifeTime = _fLifeTime + LIFE_NOISE(0.15f);
 		_color = Color3B(64 + rand() % 128, 0 + rand() % 128, 0 + rand() % 128);
 		_fSize = 1;
 		t = 2.0f * M_PI * (rand() % 101 / 100.0f);
