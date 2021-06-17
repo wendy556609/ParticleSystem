@@ -32,9 +32,11 @@ public:
 	bool onTouchEnded(const cocos2d::Point& touchLoc); //Ä²¸Iµ²§ô¨Æ¥ó 
 
 	cocos2d::Point getPosition();
+
+	cocos2d::Sprite* _BornEmitter;
 private:
 	cocos2d::Sprite* _Emitter;
-	cocos2d::Sprite* _Change;
+	cocos2d::Sprite* _Change; //rectEmitter
 
 	cocos2d::Point _Dir;
 	cocos2d::Point _initPos;

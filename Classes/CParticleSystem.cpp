@@ -90,6 +90,7 @@ void CParticleSystem::update(float dt) {
 					if (_fTime == 0) {
 						_bModeEnd = false;
 						_MoveLoc = _emitterPos;
+						CEmitter::getInstance()->_BornEmitter->setPosition(_MoveLoc);
 
 						_Direction = 90;
 						float t = rand() % 101 / 100.0f;
@@ -103,6 +104,7 @@ void CParticleSystem::update(float dt) {
 					float sint = sinf(M_PI_2 * (_fTime / _fModeTime));
 
 					_MoveLoc += _Dir * _fModeSpeed * dt * PIXEL_PERM;
+					CEmitter::getInstance()->_BornEmitter->setPosition(_MoveLoc);
 					if (_iFree != 0) {
 						get = _FreeList.front();
 						get->setPosition(_MoveLoc);

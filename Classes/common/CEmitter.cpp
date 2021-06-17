@@ -40,6 +40,7 @@ void CEmitter::Destroy() {
 void CEmitter::setSprite(const std::string& pngname, cocos2d::Point pos, cocos2d::Scene& stage) {
 	_Emitter = Sprite::createWithSpriteFrameName(pngname);
 	_Change = Sprite::createWithSpriteFrameName("emittericon1.png");
+	_BornEmitter = Sprite::createWithSpriteFrameName("emittericon1.png");
 
 	_size = _Emitter->getContentSize();
 	_initPos = pos;
@@ -51,9 +52,11 @@ void CEmitter::setSprite(const std::string& pngname, cocos2d::Point pos, cocos2d
 
 	_Emitter->setVisible(false);
 	_Change->setVisible(false);
+	_BornEmitter->setVisible(false);
 
 	stage.addChild(_Emitter, 10);
 	stage.addChild(_Change, 11);
+	stage.addChild(_BornEmitter, 11);
 }
 
 bool CEmitter::update(float dt) {
@@ -245,6 +248,7 @@ void CEmitter::setEnable(bool enable) {
 	_bEnable = enable;
 	_Emitter->setVisible(enable);
 	_Change->setVisible(false);
+	_BornEmitter->setVisible(false);
 }
 
 void CEmitter::setInit() {
@@ -267,6 +271,13 @@ void CEmitter::setType(int type) {
 	switch (type)
 	{
 	case FIREWORKSTYLE:
+		_pos.x = _initPos.x;
+		_Emitter->setSpriteFrame("sliderProgress.png");
+		_size = Size(1920, 10);
+		_Emitter->setContentSize(_size);
+		setPosition(_pos);
+		_BornEmitter->setVisible(true);
+		_iType = LINE;
 	case RAIN:
 		_pos.x = _initPos.x;
 		_Emitter->setSpriteFrame("sliderProgress.png");
