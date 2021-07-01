@@ -12,7 +12,6 @@ private:
 	CParticle* _Particle;
 	list<CParticle*> _FreeList;
 	list<CParticle*> _InUsedList;
-	list<CParticle*> _InSnowList;
 
 	int _iInUsed;
 	int _iFree;

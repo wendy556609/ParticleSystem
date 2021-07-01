@@ -116,7 +116,7 @@ void CUIView::setTarget(CParticleSystem& ParticleSystem) {
 	_ParticleSystem->setDirection(0);
 	_ParticleSystem->setSpin(0);
 	_ParticleSystem->setOpacity(255);
-	_ParticleSystem->setSpeed(0);
+	_ParticleSystem->setSpeed(1);
 	_ParticleSystem->setLifetime(3.5f);
 	_ParticleSystem->setRed(255);
 	_ParticleSystem->setGreen(255);
@@ -248,7 +248,7 @@ void CUIView::SpeedEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType ty
 	if (type == Slider::EventType::ON_PERCENTAGE_CHANGED) {
 		const Slider* slider = dynamic_cast<cocos2d::ui::Slider*>(sender);
 		int persent = slider->getPercent();
-		float fSpeed = persent / 2.5f;
+		float fSpeed = persent * 0.39f + 1;
 		_SpeedBMValue->setString(StringUtils::format("%2.0f", fSpeed));
 		_ParticleSystem->setSpeed(fSpeed);
 	}
